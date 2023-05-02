@@ -10,13 +10,30 @@ public class GameManager : MonoBehaviour
     public List<List<Card>> playerHands = new();
     public Transform[] cardPositions;
     public CardsPlace[] cardPlaces;
+    public List<Cell> cellPositions;
+
 
     private void Start()
     {
-        AceOfSpade.Shuffle(deck);
         cardsPerPlayer = deck.Count / numPlayers;
+        int place = numPlayers == 3 ? 0 : numPlayers == 4 ? 1 : numPlayers == 5 ? 2 : numPlayers == 6 ? 3 : 4;
+        cardPlaces[place].ActivatePlace();
+        cellPositions = cardPlaces[place].cells;
+        Shuffle(deck);
         Invoke(nameof(DealCards), 0.5f);
         Invoke(nameof(SortCardOnTable), 1f);
+    }
+
+    public void Shuffle<T>(List<T> list)
+    {
+        System.Random rand = new();
+        int n = list.Count;
+        while (n > 1)
+        {
+            int k = rand.Next(n);
+            n--;
+            (list[n], list[k]) = (list[k], list[n]);
+        }
     }
 
     public void DealCards()
@@ -81,6 +98,8 @@ public class CardsPlace
     public int numberOfPlayers;
     public GameObject cardsPlaceParent;
     public Transform[] cardsPositions;
+    public List<Cell> cells;
+
 
     public void ActivatePlace()
     {
@@ -91,4 +110,14 @@ public class CardsPlace
     {
         cardsPlaceParent.SetActive(false);
     }
+}
+
+[Serializable]
+public class Cell
+{
+    public string name;
+    public bool isOccupide;
+    public Card currentCard;
+    public int number;
+    public Transform cellTransform;
 }
