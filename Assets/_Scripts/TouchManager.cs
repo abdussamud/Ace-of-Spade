@@ -12,6 +12,13 @@ public class TouchManager : MonoBehaviour
     private RaycastHit2D hitCell;
     private bool isCardPlaced;
     [SerializeField] private GameObject placeCardButton;
+    private Color blueColor;
+
+
+    private void Start()
+    {
+        blueColor = new Color32(0x00, 0x72, 0xFF, 0xFF);
+    }
 
     private void Update()
     {
@@ -22,7 +29,7 @@ public class TouchManager : MonoBehaviour
             {
                 sellectedCard = rayHit.collider.gameObject;
                 oldSelectedCard = sellectedCard.GetComponent<Card>();
-                sellectedCard.GetComponent<SpriteRenderer>().color = Color.yellow;
+                sellectedCard.GetComponent<SpriteRenderer>().color = blueColor;
                 if (!isCardPlaced)
                 {
                     placeCardButton.SetActive(true);
@@ -40,13 +47,14 @@ public class TouchManager : MonoBehaviour
                     sellectedCard.GetComponent<SpriteRenderer>().color = Color.white;
                     oldSelectedCard = null;
                     sellectedCard = null;
+                    placeCardButton.SetActive(false);
                 }
                 else if (sellectedCard != rayHit.collider.gameObject)
                 {
                     sellectedCard.GetComponent<SpriteRenderer>().color = Color.white;
                     sellectedCard = rayHit.collider.gameObject;
                     oldSelectedCard = sellectedCard.GetComponent<Card>();
-                    sellectedCard.GetComponent<SpriteRenderer>().color = Color.yellow;
+                    sellectedCard.GetComponent<SpriteRenderer>().color = blueColor;
                 }
             }
         }
@@ -66,6 +74,7 @@ public class TouchManager : MonoBehaviour
                 sellectedCard = null;
                 placeCardButton.SetActive(false);
                 isCardPlaced = true;
+                cell.isOccupide = true;
                 return;
             }
         }
