@@ -75,15 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40576d60a1976e2419b64f8725497336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
-  - name: BGMusic
-    clip: {fileID: 0}
-    audioMixerGroup: {fileID: 0}
-    volume: 0
-    pitch: 0.1
-    source: {fileID: 0}
-    playOnAwake: 1
-    loop: 1
+  sounds: []
 --- !u!1 &8648868652480231493
 GameObject:
   m_ObjectHideFlags: 0
