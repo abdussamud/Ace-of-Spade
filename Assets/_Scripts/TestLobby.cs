@@ -15,6 +15,7 @@ public class TestLobby : MonoBehaviour
     private Lobby hostLobby;
     private float heartbeatTimer;
     private string joinLobbyCode;
+    public int test;
 
 
     private async void Start()
