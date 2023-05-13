@@ -16,31 +16,22 @@ public class TestLobby : MonoBehaviour
     private float heartbeatTimer;
     private string joinLobbyCode;
     public int test;
-    public TextMeshProUGUI gamedatatest;
-    public CardObject card;
 
 
-    private /*async*/ void Start()
+    private async void Start()
     {
-        gamedatatest.text = card.cardNumber.ToString();
-        //await UnityServices.InitializeAsync();
-        //
-        //AuthenticationService.Instance.SignedIn += () =>
-        //{
-        //    Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
-        //};
-        //await AuthenticationService.Instance.SignInAnonymouslyAsync();
-    }
+        await UnityServices.InitializeAsync();
 
-    public void ResetToRandom()
-    {
-        card.cardNumber = Random.Range(10, 30);
-        gamedatatest.text = card.cardNumber.ToString();
+        AuthenticationService.Instance.SignedIn += () =>
+        {
+            Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
+        };
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
     private void Update()
     {
-        //HandleLobbyHeartbeat();
+        HandleLobbyHeartbeat();
     }
 
     private async void HandleLobbyHeartbeat()
