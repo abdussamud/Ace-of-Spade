@@ -55,7 +55,7 @@ public class TestLobby : MonoBehaviour
         {
             string lobbyName = "MyLobby";
             int maxPlayer = 4;
-            CreateLobbyOptions createLobbyOptions = new() { IsPrivate = true, };
+            CreateLobbyOptions createLobbyOptions = new() { IsPrivate = false, };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, createLobbyOptions);
 
@@ -112,15 +112,14 @@ public class TestLobby : MonoBehaviour
         ListLobbies();
     }
 
-    private async void JoinLobby(string lobbyCode)
+    private async void JoinLobby()
     {
         try
         {
-            //QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-            //_ = await Lobbies.Instance.JoinLobbyByIdAsync(queryResponse.Results[0].Id);
+            QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+            _ = await Lobbies.Instance.JoinLobbyByIdAsync(queryResponse.Results[0].Id);
 
-            _ = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
-            Debug.Log("Joined Lobby with code " + lobbyCode);
+            Debug.Log("Joined Lobby");
             lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
@@ -131,12 +130,43 @@ public class TestLobby : MonoBehaviour
 
     public void OnJoinLobbyButtonClicked()
     {
-        JoinLobby(InputField.text.ToString());
+        JoinLobby();
+    }
+
+    private async void JoinLobbyWithCode(string lobbyCode)
+    {
+        try
+        {
+            _ = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
+            Debug.Log("Joined Lobby with code " + lobbyCode);
+            lobbyState.text = "Joined";
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    public void OnJoinLobbyWithCodeButtonClicked()
+    {
+        JoinLobbyWithCode(InputField.text.ToString());
         Debug.Log(InputField.text.ToString());
     }
 
-    public void AddStringCode(string code)
+    private async void QuickJoinLobbby()
     {
-        joinLobbyCode = code;
+        try
+        {
+            await LobbyService.Instance.QuickJoinLobbyAsync();
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    public void OnQuickJoinLobbyButtonClicked()
+    {
+        QuickJoinLobbby();
     }
 }
