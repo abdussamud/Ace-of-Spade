@@ -287,6 +287,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filePath: 
+  gameVariables:
+    name: 
+    number: 0
+    power: 0
   gameData: {fileID: 11400000, guid: 9f21a71039cac874ebe2876d4a5f22a9, type: 2}
 --- !u!4 &102788425
 Transform:

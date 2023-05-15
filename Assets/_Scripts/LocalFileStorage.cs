@@ -58,9 +58,3 @@ public class LocalFileStorage : MonoBehaviour
     }
 }
 
-[Serializable]
-public class GameDataValue
-{
-    public string objectNumber;
-    public int objectName;
-}
