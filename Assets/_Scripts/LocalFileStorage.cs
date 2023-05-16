@@ -6,32 +6,36 @@ using UnityEngine;
 
 public class LocalFileStorage : MonoBehaviour
 {
+    public static LocalFileStorage _go;
+
     [SerializeField]
     private string filePath;
-    public GameVariables gameVariables;
-    public GameData gameData;
+    [SerializeField]
+    public GameVariables dataToTest;
 
 
-    private void Start()
+    private void Awake()
     {
+        _go = this;
         filePath = Application.persistentDataPath + "/savedData.dat";
-        gameVariables = LoadData();
-        gameData.objectName = gameVariables.name;
-        gameData.objectNumber = gameVariables.number;
+        dataToTest = LoadData();
     }
 
     private void OnApplicationQuit()
     {
-        gameVariables.name = gameData.objectName;
-        gameVariables.number = gameData.objectNumber;
-        SaveData(gameVariables);
+        SaveData(dataToTest);
     }
 
-    public void SaveData(GameVariables gameVariables)
+    public void SaveDataOut()
+    {
+        SaveData(dataToTest);
+    }
+
+    public void SaveData(GameVariables dataToTest)
     {
         BinaryFormatter bf = new();
         FileStream file = File.Create(filePath);
-        bf.Serialize(file, gameVariables);
+        bf.Serialize(file, dataToTest);
         file.Close();
 
         Debug.Log("Data saved to " + filePath);
@@ -44,11 +48,11 @@ public class LocalFileStorage : MonoBehaviour
             BinaryFormatter bf = new();
             FileStream file = File.Open(filePath, FileMode.Open);
 
-            GameVariables gameVariables = (GameVariables)bf.Deserialize(file);
+            GameVariables dataToTest = (GameVariables)bf.Deserialize(file);
             file.Close();
 
             Debug.Log("Data loaded from " + filePath);
-            return gameVariables;
+            return dataToTest;
         }
         else
         {
@@ -58,3 +62,10 @@ public class LocalFileStorage : MonoBehaviour
     }
 }
 
+[Serializable]
+public class DataToTest
+{
+    public int Number;
+    public string Name;
+    public bool IsSaved;
+}

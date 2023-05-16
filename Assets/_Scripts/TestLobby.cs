@@ -7,6 +7,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Playables;
 
+
 public class TestLobby : MonoBehaviour
 {
     [SerializeField]
@@ -16,8 +17,14 @@ public class TestLobby : MonoBehaviour
     private Lobby hostLobby;
     private float heartbeatTimer;
     public int test;
-    private string playerName = "Sam" + UnityEngine.Random.Range(10, 99);
+    private string playerName;
+    public TextMeshProUGUI randomNumberTest;
+    public GameData gameData;
 
+    private void Awake()
+    {
+        randomNumberTest.text = LocalFileStorage._go.dataToTest.number.ToString();
+    }
 
     private async void Start()
     {
@@ -28,7 +35,7 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-
+        playerName = "Sam" + UnityEngine.Random.Range(10, 99);
         Debug.Log(playerName);
     }
 
@@ -61,15 +68,7 @@ public class TestLobby : MonoBehaviour
             CreateLobbyOptions createLobbyOptions = new()
             {
                 IsPrivate = false,
-                Player = new Player
-                {
-                    Data = new Dictionary<string, PlayerDataObject>
-                    {
-                        {
-                            "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)
-                        }
-                    }
-                }
+                Player = GetPlayer()
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, createLobbyOptions);
@@ -155,8 +154,16 @@ public class TestLobby : MonoBehaviour
     {
         try
         {
-            _ = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode);
+            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions()
+            {
+                Player = GetPlayer()
+            };
+
+            Lobby joinLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
             Debug.Log("Joined Lobby with code " + lobbyCode);
+
+            PrintPlayers(joinLobby);
+
             lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
@@ -193,7 +200,28 @@ public class TestLobby : MonoBehaviour
         Debug.Log("Players in Lobby " + lobby.Name);
         foreach (Player player in lobby.Players)
         {
-            Debug.Log(player.Id + " " + player.Data["PlayerName"]);
+            Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
         }
+    }
+
+    private Player GetPlayer()
+    {
+        return new Player
+        {
+            Data = new Dictionary<string, PlayerDataObject>
+            {
+                {
+                    "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)
+                }
+            }
+        };
+    }
+
+    public void RandomNumberToTestLFS()
+    {
+        test = Random.Range(100, 900);
+        LocalFileStorage._go.dataToTest.number = test;
+        randomNumberTest.text = test.ToString();
+        LocalFileStorage._go.SaveData(LocalFileStorage._go.dataToTest);
     }
 }
