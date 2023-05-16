@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < numPlayers; i++)
         {
             newGameObject.Add(Instantiate(new GameObject("Player" + i), gameObject.transform));
-            newGameObject[i].AddComponent<Player>();
-            newGameObject[i].GetComponent<Player>().playerNumber = i;
+            newGameObject[i].AddComponent<PlayerController>();
+            newGameObject[i].GetComponent<PlayerController>().playerNumber = i;
             List<Card> hand = new();
             for (int j = 0; j < cardsPerPlayer; j++)
             {
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < newGameObject.Count; i++)
         {
-            newGameObject[i].GetComponent<Player>().hand = playerHands[i];
+            newGameObject[i].GetComponent<PlayerController>().hand = playerHands[i];
         }
     }
 

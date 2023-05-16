@@ -5,6 +5,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class TestLobby : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class TestLobby : MonoBehaviour
     private TextMeshProUGUI lobbyState;
     private Lobby hostLobby;
     private float heartbeatTimer;
-    private string joinLobbyCode;
     public int test;
+    private string playerName = "Sam" + UnityEngine.Random.Range(10, 99);
 
 
     private async void Start()
@@ -27,6 +28,8 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        Debug.Log(playerName);
     }
 
     private void Update()
@@ -55,13 +58,28 @@ public class TestLobby : MonoBehaviour
         {
             string lobbyName = "MyLobby";
             int maxPlayer = 4;
-            CreateLobbyOptions createLobbyOptions = new() { IsPrivate = false, };
+            CreateLobbyOptions createLobbyOptions = new()
+            {
+                IsPrivate = false,
+                Player = new Player
+                {
+                    Data = new Dictionary<string, PlayerDataObject>
+                    {
+                        {
+                            "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName)
+                        }
+                    }
+                }
+            };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, createLobbyOptions);
 
             hostLobby = lobby;
 
             Debug.Log("Created Lobby! " + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
+
+            PrintPlayers(hostLobby);
+
             lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
@@ -168,5 +186,14 @@ public class TestLobby : MonoBehaviour
     public void OnQuickJoinLobbyButtonClicked()
     {
         QuickJoinLobbby();
+    }
+
+    private void PrintPlayers(Lobby lobby)
+    {
+        Debug.Log("Players in Lobby " + lobby.Name);
+        foreach (Player player in lobby.Players)
+        {
+            Debug.Log(player.Id + " " + player.Data["PlayerName"]);
+        }
     }
 }
