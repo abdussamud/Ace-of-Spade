@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -6,4 +7,9 @@ public class GameData : ScriptableObject
 {
     public string objectName;
     public int objectNumber;
+    public int numberLoad;
+    public bool isLoaded;
+    public float speedPoint;
+    public float speedValue;
+    public List<int> gameList = new();
 }

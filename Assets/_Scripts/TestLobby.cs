@@ -5,7 +5,6 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
-using UnityEngine.Playables;
 
 
 public class TestLobby : MonoBehaviour
@@ -20,10 +19,26 @@ public class TestLobby : MonoBehaviour
     private string playerName;
     public TextMeshProUGUI randomNumberTest;
     public GameData gameData;
+    public TextMeshProUGUI[] testText;
+
 
     private void Awake()
     {
-        randomNumberTest.text = LocalFileStorage._go.dataToTest.number.ToString();
+        Invoke(nameof(FuncDelay), 1f);
+    }
+
+    private void FuncDelay()
+    {
+        testText[0].text = gameData.gameList[0].ToString();
+        testText[1].text = gameData.gameList[1].ToString();
+        testText[2].text = gameData.gameList[2].ToString();
+        testText[3].text = gameData.isLoaded.ToString();
+        testText[4].text = gameData.isLoaded.ToString();
+        testText[5].text = gameData.numberLoad.ToString();
+        testText[6].text = gameData.gameList.Count.ToString();
+        testText[7].text = gameData.speedPoint.ToString();
+        testText[8].text = gameData.speedValue.ToString();
+        LocalFileStorage._go.SaveData();
     }
 
     private async void Start()
@@ -217,11 +232,55 @@ public class TestLobby : MonoBehaviour
         };
     }
 
-    public void RandomNumberToTestLFS()
+    public void ButtonTester(int number)
     {
-        test = Random.Range(100, 900);
-        LocalFileStorage._go.dataToTest.number = test;
-        randomNumberTest.text = test.ToString();
-        LocalFileStorage._go.SaveData(LocalFileStorage._go.dataToTest);
+        if (number == 0)
+        {
+            gameData.gameList[0] = Random.Range(100, 1000);
+            FuncDelay();
+        }
+        else if (number == 1)
+        {
+            gameData.gameList[1] = Random.Range(0, 8);
+            FuncDelay();
+        }
+        else if (number == 2)
+        {
+            gameData.gameList[2] = Random.Range(9, 90);
+            FuncDelay();
+        }
+        else if (number == 3)
+        {
+            gameData.isLoaded = true;
+            FuncDelay();
+        }
+        else if (number == 4)
+        {
+            gameData.isLoaded = false;
+            FuncDelay();
+        }
+        else if (number == 5)
+        {
+            gameData.numberLoad  = Random.Range(9000, 900000);
+            FuncDelay();
+        }
+        else if (number == 6)
+        {
+            gameData.numberLoad = Random.Range(100032, 1233433);
+            gameData.speedValue = Random.Range(1f, 900f);
+            FuncDelay();
+        }
+        else if (number == 7)
+        {
+            gameData.numberLoad = 1324;
+            gameData.speedPoint = Random.Range(10001f, 10005f);
+            FuncDelay();
+        }
+        else if (number == 8)
+        {
+            gameData.numberLoad = 325242;
+            gameData.speedValue = Random.Range(10009f, 10010f); ;
+            FuncDelay();
+        }
     }
 }

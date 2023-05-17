@@ -4,41 +4,29 @@ using UnityEngine;
 
 public class PersistentDataManager : MonoBehaviour
 {
-    public GameData gameData;
-    public bool newData;
+    public static PersistentDataManager Instance;
 
-
-    #region Singleton
-    public static PersistentDataManager instance;
-    internal readonly object gameDataFromPlayerPrefs;
+    [SerializeField]
+    private GameData gameData;
+    [SerializeField]
+    private bool newData;
+    [SerializeField]
+    private string dataKey = "GameData";
 
 
     private void Awake()
     {
-        GetInstance();
-    }
-
-    private void GetInstance()
-    {
-        if (instance != null)
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameData);
+        }
+        else
+        {
             Destroy(gameObject);
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            return;
         }
-    }
-    #endregion
-
-    private void Start()
-    {
-        if (!newData) { LoadData(); }
-        else
-        {
-            SaveData();
-            Invoke(nameof(LoadData), 0.1f);
-        }
-        // PlayerPrefs.DeleteAll();
+        LoadData();
     }
 
     private void OnApplicationQuit()
@@ -46,27 +34,33 @@ public class PersistentDataManager : MonoBehaviour
         SaveData();
     }
 
-    public void SaveData()
-    {
-        string gameDataString = JsonConvert.SerializeObject(gameData);
-        PlayerPrefs.SetString("GameData", gameDataString);
-        PlayerPrefs.Save();
-        print("GameData Saved In PlayerPrefs: " + PlayerPrefs.GetString("GameData"));
-    }
-
     public void LoadData()
     {
-        string gameDataString = PlayerPrefs.GetString("GameData");
-        GameData gameDataFromPlayerPrefs = JsonConvert.DeserializeObject<GameData>(gameDataString);
-        if (gameDataFromPlayerPrefs == null)
+        if (PlayerPrefs.HasKey(dataKey))
         {
-            print("Game is played first time. No GameData found.");
-            return;
-        }
-        print("GameData Loaded From PlayerPrefs");
+            //var jsonString = PlayerPrefs.GetString(dataKey);
+            GameData saveData = JsonConvert.DeserializeObject<GameData>(PlayerPrefs.GetString(dataKey));
 
-        // Set Local GameData Variables Here - Start
-        gameData.objectName = gameDataFromPlayerPrefs.objectName;
-        // Set Local GameData Variables Here - End
+            gameData.gameList = saveData.gameList;
+            gameData.isLoaded = saveData.isLoaded;
+            gameData.numberLoad = saveData.numberLoad;
+            gameData.name = saveData.name;
+            gameData.objectNumber = saveData.objectNumber;
+            gameData.objectName = saveData.objectName;
+
+            Debug.Log("Data Loaded!");
+        }
+        else
+        {
+            Debug.Log("First Time Data Laod!");
+        }
+    }
+
+    public void SaveData()
+    {
+        //var jsonString = JsonUtility.ToJson(gameData);
+        PlayerPrefs.SetString(dataKey, JsonConvert.SerializeObject(gameData));
+        PlayerPrefs.Save();
+        Debug.Log("Data Saved!");
     }
 }

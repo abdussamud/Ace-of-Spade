@@ -1,6 +1,5 @@
-using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 using UnityEngine;
 
 
@@ -11,61 +10,52 @@ public class LocalFileStorage : MonoBehaviour
     [SerializeField]
     private string filePath;
     [SerializeField]
-    public GameVariables dataToTest;
+    public GameData gameData;
+    [SerializeField]
+    //private string LFSKey = "GameData";
 
 
     private void Awake()
     {
         _go = this;
-        filePath = Application.persistentDataPath + "/savedData.dat";
-        dataToTest = LoadData();
+        filePath = Application.persistentDataPath + "/savedData.json";
+        LoadData();
     }
 
     private void OnApplicationQuit()
     {
-        SaveData(dataToTest);
+        SaveData();
     }
 
-    public void SaveDataOut()
-    {
-        SaveData(dataToTest);
-    }
 
-    public void SaveData(GameVariables dataToTest)
+    public void SaveData()
     {
-        BinaryFormatter bf = new();
-        FileStream file = File.Create(filePath);
-        bf.Serialize(file, dataToTest);
-        file.Close();
+        string json = JsonConvert.SerializeObject(gameData);
+        File.WriteAllText(filePath, json);
 
         Debug.Log("Data saved to " + filePath);
     }
 
-    public GameVariables LoadData()
+    public void LoadData()
     {
         if (File.Exists(filePath))
         {
-            BinaryFormatter bf = new();
-            FileStream file = File.Open(filePath, FileMode.Open);
+            string json = File.ReadAllText(filePath);
+            GameData loadData = JsonConvert.DeserializeObject<GameData>(json);
 
-            GameVariables dataToTest = (GameVariables)bf.Deserialize(file);
-            file.Close();
+            gameData.objectName = loadData.objectName;
+            gameData.objectNumber = loadData.objectNumber;
+            gameData.numberLoad = loadData.numberLoad;
+            gameData.isLoaded = loadData.isLoaded;
+            gameData.speedPoint = loadData.speedPoint;
+            gameData.speedValue = loadData.speedValue;
+            gameData.gameList = loadData.gameList;
 
             Debug.Log("Data loaded from " + filePath);
-            return dataToTest;
         }
         else
         {
             Debug.LogWarning("Save file not found at " + filePath);
-            return null;
         }
     }
-}
-
-[Serializable]
-public class DataToTest
-{
-    public int Number;
-    public string Name;
-    public bool IsSaved;
 }

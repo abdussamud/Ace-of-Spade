@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16117f9efeb22a849a2ece84c9c06046, type: 3}
   m_Name: Game Data Object
   m_EditorClassIdentifier: 
-  objectName: name
-  objectNumber: 2
+  objectName: o
+  objectNumber: 0
+  numberLoad: 0
+  isLoaded: 0
+  speedPoint: 0
+  speedValue: 0
+  gameList: 000000000000000000000000
