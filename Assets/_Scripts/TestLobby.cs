@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -10,38 +11,22 @@ using UnityEngine;
 public class TestLobby : MonoBehaviour
 {
     [SerializeField]
+    private GameData gameData;
+    [SerializeField]
     private TMP_InputField InputField;
     [SerializeField]
     private TextMeshProUGUI lobbyState;
     private Lobby hostLobby;
     private float heartbeatTimer;
-    public int test;
     private string playerName;
-    public TextMeshProUGUI randomNumberTest;
-    public GameData gameData;
-    public TextMeshProUGUI[] testText;
 
 
-    private void Awake()
+    private void Start()
     {
-        Invoke(nameof(FuncDelay), 1f);
+        InitializeUnityServices();
     }
 
-    private void FuncDelay()
-    {
-        testText[0].text = gameData.gameList[0].ToString();
-        testText[1].text = gameData.gameList[1].ToString();
-        testText[2].text = gameData.gameList[2].ToString();
-        testText[3].text = gameData.isLoaded.ToString();
-        testText[4].text = gameData.isLoaded.ToString();
-        testText[5].text = gameData.numberLoad.ToString();
-        testText[6].text = gameData.gameList.Count.ToString();
-        testText[7].text = gameData.speedPoint.ToString();
-        testText[8].text = gameData.speedValue.ToString();
-        LocalFileStorage._go.SaveData();
-    }
-
-    private async void Start()
+    private async void InitializeUnityServices()
     {
         await UnityServices.InitializeAsync();
 
@@ -50,7 +35,7 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        playerName = "Sam" + UnityEngine.Random.Range(10, 99);
+        playerName = "Sam" + Random.Range(10, 99);
         Debug.Log(playerName);
     }
 
@@ -83,7 +68,11 @@ public class TestLobby : MonoBehaviour
             CreateLobbyOptions createLobbyOptions = new()
             {
                 IsPrivate = false,
-                Player = GetPlayer()
+                Player = GetPlayer(),
+                Data = new Dictionary<string, DataObject>
+                {
+                    { "GameMode", new DataObject(DataObject.VisibilityOptions.Public, "Ace Of Spades") }
+                }
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayer, createLobbyOptions);
@@ -108,7 +97,7 @@ public class TestLobby : MonoBehaviour
         CreateLobby();
     }
 
-    private async void ListLobbies()
+    private async void ListLobbiesOld()
     {
         try
         {
@@ -130,13 +119,62 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Lobbies found: " + queryResponse.Results.Count);
             foreach (Lobby lobby in queryResponse.Results)
             {
-                Debug.Log(lobby.Name + " " + lobby.MaxPlayers);
+                Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["GameMode"].Value);
             }
         }
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
         }
+    }
+
+    private async void ListLobbies()
+    {
+        try
+        {
+            QueryLobbiesOptions queryLobbiesOptions = CreateQueryLobbiesOptions();
+            QueryResponse queryResponse = await QueryLobbiesAsync(queryLobbiesOptions);
+            LogLobbies(queryResponse);
+        }
+        catch (LobbyServiceException e)
+        {
+            LogException(e);
+        }
+    }
+
+    private QueryLobbiesOptions CreateQueryLobbiesOptions()
+    {
+        return new QueryLobbiesOptions
+        {
+            Count = 25,
+            Filters = new List<QueryFilter>
+            {
+                new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
+            },
+            Order = new List<QueryOrder>
+            {
+                new QueryOrder(false, QueryOrder.FieldOptions.Created)
+            }
+        };
+    }
+
+    private async Task<QueryResponse> QueryLobbiesAsync(QueryLobbiesOptions options)
+    {
+        return await Lobbies.Instance.QueryLobbiesAsync(options);
+    }
+
+    private void LogLobbies(QueryResponse queryResponse)
+    {
+        Debug.Log("Lobbies found: " + queryResponse.Results.Count);
+        foreach (Lobby lobby in queryResponse.Results)
+        {
+            Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["GameMode"].Value);
+        }
+    }
+
+    private void LogException(LobbyServiceException e)
+    {
+        Debug.Log(e);
     }
 
     public void OnGetLobbiesListButtonClicked()
@@ -169,7 +207,7 @@ public class TestLobby : MonoBehaviour
     {
         try
         {
-            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions()
+            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new()
             {
                 Player = GetPlayer()
             };
@@ -212,7 +250,7 @@ public class TestLobby : MonoBehaviour
 
     private void PrintPlayers(Lobby lobby)
     {
-        Debug.Log("Players in Lobby " + lobby.Name);
+        Debug.Log("Players in Lobby " + lobby.Name + " GameMode: " + lobby.Data["GameMode"].Value);
         foreach (Player player in lobby.Players)
         {
             Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
@@ -230,57 +268,5 @@ public class TestLobby : MonoBehaviour
                 }
             }
         };
-    }
-
-    public void ButtonTester(int number)
-    {
-        if (number == 0)
-        {
-            gameData.gameList[0] = Random.Range(100, 1000);
-            FuncDelay();
-        }
-        else if (number == 1)
-        {
-            gameData.gameList[1] = Random.Range(0, 8);
-            FuncDelay();
-        }
-        else if (number == 2)
-        {
-            gameData.gameList[2] = Random.Range(9, 90);
-            FuncDelay();
-        }
-        else if (number == 3)
-        {
-            gameData.isLoaded = true;
-            FuncDelay();
-        }
-        else if (number == 4)
-        {
-            gameData.isLoaded = false;
-            FuncDelay();
-        }
-        else if (number == 5)
-        {
-            gameData.numberLoad  = Random.Range(9000, 900000);
-            FuncDelay();
-        }
-        else if (number == 6)
-        {
-            gameData.numberLoad = Random.Range(100032, 1233433);
-            gameData.speedValue = Random.Range(1f, 900f);
-            FuncDelay();
-        }
-        else if (number == 7)
-        {
-            gameData.numberLoad = 1324;
-            gameData.speedPoint = Random.Range(10001f, 10005f);
-            FuncDelay();
-        }
-        else if (number == 8)
-        {
-            gameData.numberLoad = 325242;
-            gameData.speedValue = Random.Range(10009f, 10010f); ;
-            FuncDelay();
-        }
     }
 }
