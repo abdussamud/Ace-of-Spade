@@ -38,7 +38,6 @@ public class PersistentDataManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey(dataKey))
         {
-            //var jsonString = PlayerPrefs.GetString(dataKey);
             GameData saveData = JsonConvert.DeserializeObject<GameData>(PlayerPrefs.GetString(dataKey));
 
             gameData.gameList = saveData.gameList;
@@ -58,7 +57,6 @@ public class PersistentDataManager : MonoBehaviour
 
     public void SaveData()
     {
-        //var jsonString = JsonUtility.ToJson(gameData);
         PlayerPrefs.SetString(dataKey, JsonConvert.SerializeObject(gameData));
         PlayerPrefs.Save();
         Debug.Log("Data Saved!");

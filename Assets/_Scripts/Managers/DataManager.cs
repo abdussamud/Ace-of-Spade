@@ -3,30 +3,36 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 
-public class LocalFileStorage : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
-    public static LocalFileStorage _go;
+    public static DataManager Instance { get; private set; }
 
     [SerializeField]
     private string filePath;
     [SerializeField]
-    public GameData gameData;
+    private GameData gameData;
     [SerializeField]
-    //private string LFSKey = "GameData";
+    private bool resetData;
 
 
     private void Awake()
     {
-        _go = this;
+        Instance = this;
         filePath = Application.persistentDataPath + "/savedData.json";
-        LoadData();
+        if (!resetData)
+        {
+            LoadData();
+        }
+        else
+        {
+            SaveData();
+        }
     }
 
     private void OnApplicationQuit()
     {
         SaveData();
     }
-
 
     public void SaveData()
     {
@@ -41,15 +47,15 @@ public class LocalFileStorage : MonoBehaviour
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
-            GameData loadData = JsonConvert.DeserializeObject<GameData>(json);
+            GameData loadedData = JsonConvert.DeserializeObject<GameData>(json);
 
-            gameData.objectName = loadData.objectName;
-            gameData.objectNumber = loadData.objectNumber;
-            gameData.numberLoad = loadData.numberLoad;
-            gameData.isLoaded = loadData.isLoaded;
-            gameData.speedPoint = loadData.speedPoint;
-            gameData.speedValue = loadData.speedValue;
-            gameData.gameList = loadData.gameList;
+            gameData.objectName = loadedData.objectName;
+            gameData.objectNumber = loadedData.objectNumber;
+            gameData.numberLoad = loadedData.numberLoad;
+            gameData.isLoaded = loadedData.isLoaded;
+            gameData.speedPoint = loadedData.speedPoint;
+            gameData.speedValue = loadedData.speedValue;
+            gameData.gameList = loadedData.gameList;
 
             Debug.Log("Data loaded from " + filePath);
         }

@@ -3,38 +3,28 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    //public static AudioManager Instance;
     public Sound[] sounds;
+
 
     private void Awake()
     {
-        #region Singleton
-        //if (Instance == null)
-        //{
-        //    Instance = this;
-        //}
-        //else
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
-        //
-        //DontDestroyOnLoad(gameObject);
-        #endregion
+        Instance = this;
 
-        foreach (Sound s in sounds)
+        foreach (Sound sound in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.outputAudioMixerGroup = s.audioMixerGroup;
-            s.source.clip = s.clip;
-            s.source.volume = s.volume;
-            s.source.pitch = s.pitch;
-            s.source.playOnAwake = s.playOnAwake;
-            s.source.loop = s.loop;
+            sound.source = gameObject.AddComponent<AudioSource>();
+            sound.source.outputAudioMixerGroup = sound.audioMixerGroup;
+            sound.source.clip = sound.clip;
+            sound.source.volume = sound.volume;
+            sound.source.pitch = sound.pitch;
+            sound.source.playOnAwake = sound.playOnAwake;
+            sound.source.loop = sound.loop;
         }
     }
 
-    private void Start()
+    public static AudioManager Instance { get; private set; }
+
+    private void MyStart()
     {
         //Play("BGMusic");
     }

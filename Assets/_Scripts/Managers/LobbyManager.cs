@@ -8,7 +8,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 
-public class TestLobby : MonoBehaviour
+public class LobbyManager : MonoBehaviour
 {
     [SerializeField]
     private GameData gameData;
@@ -21,10 +21,17 @@ public class TestLobby : MonoBehaviour
     private string playerName;
 
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         InitializeUnityServices();
     }
+
+    public static LobbyManager Instance { get; private set; }
 
     private async void InitializeUnityServices()
     {
@@ -89,7 +96,6 @@ public class TestLobby : MonoBehaviour
         {
             Debug.Log(e);
         }
-
     }
 
     public void OnCreateLobbyButtonClicked()
