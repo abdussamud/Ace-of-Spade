@@ -19,6 +19,8 @@ public class LobbyManager : MonoBehaviour
     private Lobby hostLobby;
     private float heartbeatTimer;
     private string playerName;
+    [SerializeField]
+    private GameObject lobiesListParentGO;
 
 
     private void Awake()

@@ -49,13 +49,7 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(filePath);
             GameData loadedData = JsonConvert.DeserializeObject<GameData>(json);
 
-            gameData.objectName = loadedData.objectName;
-            gameData.objectNumber = loadedData.objectNumber;
-            gameData.numberLoad = loadedData.numberLoad;
-            gameData.isLoaded = loadedData.isLoaded;
-            gameData.speedPoint = loadedData.speedPoint;
-            gameData.speedValue = loadedData.speedValue;
-            gameData.gameList = loadedData.gameList;
+            gameData.m_Name = loadedData.m_Name;
 
             Debug.Log("Data loaded from " + filePath);
         }
