@@ -6,14 +6,31 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
+    public static LobbyManager Instance { get; private set; }
+
+    [Header("UI Panel")]
+    public GameObject CreateAccountPanel;
+    public GameObject CreateLobbyPanel;
+    public GameObject LobbiesListPanel;
+    public GameObject InLobbyPanel;
+
+
     [SerializeField]
     private GameData gameData;
     [SerializeField]
+    private TMP_InputField playerNameInputField;
+    [SerializeField]
     private TMP_InputField InputField;
+    [SerializeField]
+    private TMP_InputField lobbyNameInputField;
+    [SerializeField]
+    private Slider lobbyMaxPlayerCount;
+    [SerializeField]
+    private TextMeshProUGUI lobbyPrivacyText;
     [SerializeField]
     private TextMeshProUGUI lobbyState;
     private Lobby hostLobby;
@@ -21,31 +38,46 @@ public class LobbyManager : MonoBehaviour
     private string playerName;
     [SerializeField]
     private GameObject lobiesListParentGO;
+    [SerializeField]
+    private GameObject lobbyNameCard;
+    [SerializeField]
+    private bool isLobbyPrivate;
 
 
-    private void Awake()
+    private void Awake() { Instance = this; }
+
+    public void OnCreateAccountButtonClicked()
     {
-        Instance = this;
+        if (playerNameInputField.text != string.Empty)
+        {
+            InitializeUnityServices();
+        }
+        else
+        {
+            Debug.Log("Invalid Player Name!");
+        }
     }
-
-    private void Start()
-    {
-        InitializeUnityServices();
-    }
-
-    public static LobbyManager Instance { get; private set; }
 
     private async void InitializeUnityServices()
     {
-        await UnityServices.InitializeAsync();
-
-        AuthenticationService.Instance.SignedIn += () =>
+        try
         {
-            Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
-        };
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        playerName = "Sam" + Random.Range(10, 99);
-        Debug.Log(playerName);
+            await UnityServices.InitializeAsync();
+
+            AuthenticationService.Instance.SignedIn += () =>
+            {
+                Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
+            };
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            playerName = playerNameInputField.text;
+            Debug.Log(playerName);
+            CreateLobbyPanel.SetActive(true);
+            CreateAccountPanel.SetActive(false);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log("Error occurred during Unity services initialization: " + e.Message);
+        }
     }
 
     private void Update()
@@ -72,11 +104,11 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
-            string lobbyName = "MyLobby";
-            int maxPlayer = 4;
+            string lobbyName = lobbyNameInputField.text;
+            int maxPlayer = (int)lobbyMaxPlayerCount.value;
             CreateLobbyOptions createLobbyOptions = new()
             {
-                IsPrivate = false,
+                IsPrivate = isLobbyPrivate,
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>
                 {
@@ -88,11 +120,21 @@ public class LobbyManager : MonoBehaviour
 
             hostLobby = lobby;
 
+            if (!isLobbyPrivate)
+            {
+                GameObject lobbyCard = Instantiate(lobbyNameCard, lobiesListParentGO.transform);
+                LobbyNameCard lobbyNameCardComponent = lobbyCard.GetComponent<LobbyNameCard>();
+                lobbyNameCardComponent.playerCount = lobby.Players.Count;
+                lobbyNameCardComponent.totalPlayerCount = lobby.MaxPlayers;
+                lobbyNameCardComponent.lobbyName = lobbyName;
+                lobbyNameCardComponent.SetLobbyName_and_PlayerCount();
+                lobbyNameCardComponent.lobbyCardJoinButton.onClick.AddListener(OnJoinLobbyById);
+            }
             Debug.Log("Created Lobby! " + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
 
             PrintPlayers(hostLobby);
 
-            lobbyState.text = "Joined";
+            //lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
         {
@@ -102,7 +144,14 @@ public class LobbyManager : MonoBehaviour
 
     public void OnCreateLobbyButtonClicked()
     {
-        CreateLobby();
+        if (lobbyNameInputField.text != string.Empty)
+        {
+            CreateLobby();
+        }
+        else
+        {
+            Debug.Log("Invalid Lobby Name!");
+        }
     }
 
     private async void ListLobbiesOld()
@@ -190,7 +239,7 @@ public class LobbyManager : MonoBehaviour
         ListLobbies();
     }
 
-    private async void JoinLobby()
+    private async void JoinLobbyById()
     {
         try
         {
@@ -206,9 +255,9 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public void OnJoinLobbyButtonClicked()
+    public void OnJoinLobbyById()
     {
-        JoinLobby();
+        JoinLobbyById();
     }
 
     private async void JoinLobbyWithCode(string lobbyCode)
@@ -276,5 +325,23 @@ public class LobbyManager : MonoBehaviour
                 }
             }
         };
+    }
+
+    public void LobbyPrivacyButton(TextMeshProUGUI lobbyPrivacyText)
+    {
+        isLobbyPrivate = !isLobbyPrivate;
+        lobbyPrivacyText.text = isLobbyPrivate ? "Private Lobby" : "Public Lobby";
+    }
+
+    public void OnCheckAvailableLobbiesButtonClicked()
+    {
+        LobbiesListPanel.SetActive(true);
+        CreateLobbyPanel.SetActive(false);
+    }
+
+    public void ExitLobbiesListPanel()
+    {
+        CreateLobbyPanel.SetActive(true);
+        LobbiesListPanel.SetActive(false);
     }
 }

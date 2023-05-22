@@ -68,8 +68,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -322,6 +322,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyName: 
   playerCount: 0
+  totalPlayerCount: 0
+  lobbyCardJoinButton: {fileID: 4905331790956295998}
   lobbyNameText: {fileID: 4822929233381670688}
   playerCountText: {fileID: 6747071558666959}
 --- !u!1 &5864503603441699199
@@ -359,8 +361,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -214.39, y: 0}
-  m_SizeDelta: {x: 428.79, y: 100}
+  m_AnchoredPosition: {x: -207.26591, y: 0}
+  m_SizeDelta: {x: 414.5418, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1666012378145854213
 CanvasRenderer:
@@ -492,10 +494,10 @@ RectTransform:
   m_Father: {fileID: 1125136345434524848}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 214.4, y: 0}
-  m_SizeDelta: {x: 428.79, y: 100}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -214.6, y: 0}
+  m_SizeDelta: {x: 199.09552, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3090172419694964697
 CanvasRenderer:
@@ -662,8 +664,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
