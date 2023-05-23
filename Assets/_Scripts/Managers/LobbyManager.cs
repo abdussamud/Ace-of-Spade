@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
@@ -8,9 +9,12 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class LobbyManager : MonoBehaviour
 {
     public static LobbyManager Instance { get; private set; }
+
+    public GameData gameData;
 
     [Header("UI Panel")]
     public GameObject CreateAccountPanel;
@@ -18,24 +22,26 @@ public class LobbyManager : MonoBehaviour
     public GameObject LobbiesListPanel;
     public GameObject InLobbyPanel;
 
+    [Header("Account")]
+    private string playerName;
+    [SerializeField]
+    private TextMeshProUGUI invalidNamePrompter;
 
+    [Header("Player")]
     [SerializeField]
-    private GameData gameData;
+    private GameObject playerListParentGO;
     [SerializeField]
-    private TMP_InputField playerNameInputField;
-    [SerializeField]
-    private TMP_InputField InputField;
-    [SerializeField]
-    private TMP_InputField lobbyNameInputField;
+    private GameObject playerNameCard;
+
+    [Header("Lobby")]
+    private string lobbyName;
     [SerializeField]
     private Slider lobbyMaxPlayerCount;
     [SerializeField]
-    private TextMeshProUGUI lobbyPrivacyText;
-    [SerializeField]
-    private TextMeshProUGUI lobbyState;
+    private TextMeshProUGUI invalidLobbyNamePrompter;
+
     private Lobby hostLobby;
     private float heartbeatTimer;
-    private string playerName;
     [SerializeField]
     private GameObject lobiesListParentGO;
     [SerializeField]
@@ -46,19 +52,45 @@ public class LobbyManager : MonoBehaviour
 
     private void Awake() { Instance = this; }
 
+    private void Start()
+    {
+        if (!string.IsNullOrEmpty(gameData.userName))
+        {
+            playerName = gameData.userName;
+            AccountLogin();
+        }
+    }
+
+    private void Update() { HandleLobbyHeartbeat(); }
+
     public void OnCreateAccountButtonClicked()
     {
-        if (playerNameInputField.text != string.Empty)
+        if (!string.IsNullOrEmpty(playerName) && playerName.All(char.IsLetter) && playerName.Length >= 5)
         {
-            InitializeUnityServices();
+            AccountLogin();
         }
         else
         {
+            if (string.IsNullOrEmpty(playerName))
+            {
+                invalidNamePrompter.text = "Player Name shoulden't be empty!";
+                Invoke(nameof(PrompterHider), 4f);
+            }
+            else if (playerName.Length is > 0 and < 5)
+            {
+                invalidNamePrompter.text = "Player Name Length Should be Less then 5!";
+                Invoke(nameof(PrompterHider), 4f);
+            }
+            else
+            {
+                invalidNamePrompter.text = "Spaces aren't allowed!";
+                Invoke(nameof(PrompterHider), 4f);
+            }
             Debug.Log("Invalid Player Name!");
         }
     }
 
-    private async void InitializeUnityServices()
+    private async void AccountLogin()
     {
         try
         {
@@ -69,7 +101,8 @@ public class LobbyManager : MonoBehaviour
                 Debug.Log("Signed in: " + AuthenticationService.Instance.PlayerId);
             };
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            playerName = playerNameInputField.text;
+            gameData.userName = playerName;
+            DataManager.Instance.SaveData();
             Debug.Log(playerName);
             CreateLobbyPanel.SetActive(true);
             CreateAccountPanel.SetActive(false);
@@ -78,11 +111,6 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log("Error occurred during Unity services initialization: " + e.Message);
         }
-    }
-
-    private void Update()
-    {
-        HandleLobbyHeartbeat();
     }
 
     private async void HandleLobbyHeartbeat()
@@ -104,7 +132,6 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
-            string lobbyName = lobbyNameInputField.text;
             int maxPlayer = (int)lobbyMaxPlayerCount.value;
             CreateLobbyOptions createLobbyOptions = new()
             {
@@ -131,10 +158,9 @@ public class LobbyManager : MonoBehaviour
                 lobbyNameCardComponent.lobbyCardJoinButton.onClick.AddListener(OnJoinLobbyById);
             }
             Debug.Log("Created Lobby! " + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
-
+            InLobbyPanel.SetActive(true);
+            CreateLobbyPanel.SetActive(false);
             PrintPlayers(hostLobby);
-
-            //lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
         {
@@ -144,44 +170,29 @@ public class LobbyManager : MonoBehaviour
 
     public void OnCreateLobbyButtonClicked()
     {
-        if (lobbyNameInputField.text != string.Empty)
+
+        if (!string.IsNullOrEmpty(lobbyName) && lobbyName.All(char.IsLetter) && lobbyName.Length > 5)
         {
             CreateLobby();
         }
         else
         {
-            Debug.Log("Invalid Lobby Name!");
-        }
-    }
-
-    private async void ListLobbiesOld()
-    {
-        try
-        {
-            QueryLobbiesOptions queryLobbiesOptions = new()
+            if (string.IsNullOrEmpty(lobbyName))
             {
-                Count = 25,
-                Filters = new List<QueryFilter>
-                {
-                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
-                },
-                Order = new List<QueryOrder>
-                {
-                    new QueryOrder(false, QueryOrder.FieldOptions.Created)
-                }
-            };
-
-            QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-
-            Debug.Log("Lobbies found: " + queryResponse.Results.Count);
-            foreach (Lobby lobby in queryResponse.Results)
-            {
-                Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["GameMode"].Value);
+                invalidLobbyNamePrompter.text = "Lobby Name shoulden't be empty!";
+                Invoke(nameof(PrompterHider), 4f);
             }
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.Log(e);
+            else if (lobbyName.Length is > 0 and < 5)
+            {
+                invalidLobbyNamePrompter.text = "Lobby Name Length Should be greater then 5!";
+                Invoke(nameof(PrompterHider), 4f);
+            }
+            else
+            {
+                invalidLobbyNamePrompter.text = "Spaces aren't allowed!";
+                Invoke(nameof(PrompterHider), 4f);
+            }
+            Debug.Log("Invalid Lobby Name!");
         }
     }
 
@@ -247,7 +258,6 @@ public class LobbyManager : MonoBehaviour
             _ = await Lobbies.Instance.JoinLobbyByIdAsync(queryResponse.Results[0].Id);
 
             Debug.Log("Joined Lobby");
-            lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
         {
@@ -273,8 +283,6 @@ public class LobbyManager : MonoBehaviour
             Debug.Log("Joined Lobby with code " + lobbyCode);
 
             PrintPlayers(joinLobby);
-
-            lobbyState.text = "Joined";
         }
         catch (LobbyServiceException e)
         {
@@ -284,8 +292,8 @@ public class LobbyManager : MonoBehaviour
 
     public void OnJoinLobbyWithCodeButtonClicked()
     {
-        JoinLobbyWithCode(InputField.text.ToString());
-        Debug.Log(InputField.text.ToString());
+        //JoinLobbyWithCode(InputField.text.ToString());
+        //Debug.Log(InputField.text.ToString());
     }
 
     private async void QuickJoinLobbby()
@@ -343,5 +351,21 @@ public class LobbyManager : MonoBehaviour
     {
         CreateLobbyPanel.SetActive(true);
         LobbiesListPanel.SetActive(false);
+    }
+
+    public void GetPlayerName(string playerNameIn)
+    {
+        playerName = playerNameIn;
+    }
+
+    public void GetLobbyName(string lobbyNameIn)
+    {
+        lobbyName = lobbyNameIn;
+    }
+
+    private void PrompterHider()
+    {
+        invalidLobbyNamePrompter.text = "";
+        invalidNamePrompter.text = "";
     }
 }

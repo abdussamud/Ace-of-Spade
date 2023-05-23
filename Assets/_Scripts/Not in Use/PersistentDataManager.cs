@@ -40,7 +40,7 @@ public class PersistentDataManager : MonoBehaviour
         {
             GameData saveData = JsonConvert.DeserializeObject<GameData>(PlayerPrefs.GetString(dataKey));
 
-            gameData.m_Name = saveData.m_Name;
+            gameData.userName = saveData.userName;
 
             Debug.Log("Data Loaded!");
         }
