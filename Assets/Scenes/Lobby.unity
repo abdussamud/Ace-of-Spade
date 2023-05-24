@@ -1424,6 +1424,8 @@ MonoBehaviour:
   playerNameCard: {fileID: 3757718022089726947, guid: 65967510ce1a29a44b6a6f9165909382, type: 3}
   lobbyMaxPlayerCount: {fileID: 1386796327}
   invalidLobbyNamePrompter: {fileID: 1127468096}
+  lobyyNameForInLobby: {fileID: 863467369}
+  lobyyPlayerCountText: {fileID: 654791881}
   lobiesListParentGO: {fileID: 1136534625}
   lobbyNameCard: {fileID: 5563709042771184890, guid: 5bb25b4731b07e04f9d77c06eca68b3a, type: 3}
   isLobbyPrivate: 1
@@ -2226,7 +2228,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 648618657}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339539603}
+        m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
+        m_MethodName: OnClickLeaveLobbyButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &648618657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3399,7 +3413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &941321068
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5646,7 +5660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1671871653
 RectTransform:
   m_ObjectHideFlags: 0

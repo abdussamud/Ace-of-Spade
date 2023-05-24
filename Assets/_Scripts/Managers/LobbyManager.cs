@@ -34,20 +34,27 @@ public class LobbyManager : MonoBehaviour
     private GameObject playerNameCard;
 
     [Header("Lobby")]
-    private string lobbyName;
     [SerializeField]
     private Slider lobbyMaxPlayerCount;
+    private string lobbyName;
     [SerializeField]
     private TextMeshProUGUI invalidLobbyNamePrompter;
-
+    [SerializeField]
+    private TextMeshProUGUI lobyyNameForInLobby;
+    [SerializeField]
+    private TextMeshProUGUI lobyyPlayerCountText;
     private Lobby hostLobby;
     private float heartbeatTimer;
+    private float lobbyPollTimer;
     [SerializeField]
     private GameObject lobiesListParentGO;
     [SerializeField]
     private GameObject lobbyNameCard;
     [SerializeField]
     private bool isLobbyPrivate;
+
+    private List<GameObject> lobbyListGO = new();
+    private List<GameObject> playerListGO = new();
 
 
     private void Awake() { Instance = this; }
@@ -61,7 +68,10 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    private void Update() { HandleLobbyHeartbeat(); }
+    private void Update()
+    {
+        HandleLobbyHeartbeat();
+    }
 
     public void OnCreateAccountButtonClicked()
     {
@@ -126,6 +136,24 @@ public class LobbyManager : MonoBehaviour
                 await LobbyService.Instance.SendHeartbeatPingAsync(hostLobby.Id);
             }
         }
+        if (hostLobby != null && hostLobby.Players.Count > 0)
+        {
+            lobbyPollTimer -= Time.deltaTime;
+            if (lobbyPollTimer < 0f)
+            {
+                playerListGO.ForEach(pL => Destroy(pL));
+                playerListGO.Clear();
+                float lobbyPollTimerMax = 5;
+                lobbyPollTimer = lobbyPollTimerMax;
+                Invoke(nameof(PrintPlayerDelay), 0.2f);
+                //await LobbyService.Instance.SendHeartbeatPingAsync(hostLobby.Id);
+            }
+        }
+    }
+
+    private void PrintPlayerDelay()
+    {
+        PrintPlayers(hostLobby);
     }
 
     private async void CreateLobby()
@@ -149,18 +177,15 @@ public class LobbyManager : MonoBehaviour
 
             if (!isLobbyPrivate)
             {
-                GameObject lobbyCard = Instantiate(lobbyNameCard, lobiesListParentGO.transform);
-                LobbyNameCard lobbyNameCardComponent = lobbyCard.GetComponent<LobbyNameCard>();
-                lobbyNameCardComponent.playerCount = lobby.Players.Count;
-                lobbyNameCardComponent.totalPlayerCount = lobby.MaxPlayers;
-                lobbyNameCardComponent.lobbyName = lobbyName;
-                lobbyNameCardComponent.SetLobbyName_and_PlayerCount();
-                lobbyNameCardComponent.lobbyCardJoinButton.onClick.AddListener(OnJoinLobbyById);
+
             }
             Debug.Log("Created Lobby! " + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
             InLobbyPanel.SetActive(true);
             CreateLobbyPanel.SetActive(false);
+            lobbyPollTimer = 15;
             PrintPlayers(hostLobby);
+            lobyyNameForInLobby.text = hostLobby.Name;
+            lobyyPlayerCountText.text = (lobby.Players.Count + " / " + lobby.MaxPlayers).ToString();
         }
         catch (LobbyServiceException e)
         {
@@ -237,6 +262,17 @@ public class LobbyManager : MonoBehaviour
         foreach (Lobby lobby in queryResponse.Results)
         {
             Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["GameMode"].Value);
+
+            GameObject lobbyCard = Instantiate(lobbyNameCard, lobiesListParentGO.transform);
+            LobbyNameCard lobbyNameCardComponent = lobbyCard.GetComponent<LobbyNameCard>();
+            lobbyNameCardComponent.playerCount = lobby.Players.Count;
+            lobbyNameCardComponent.totalPlayerCount = lobby.MaxPlayers;
+            lobbyNameCardComponent.lobbyName = lobby.Name;
+            lobbyNameCardComponent.SetLobbyName_and_PlayerCount();
+            lobbyNameCardComponent.lobbyCardJoinButton.onClick.AddListener(OnJoinLobbyById);
+
+            lobyyNameForInLobby.text = hostLobby.Name;
+            lobyyPlayerCountText.text = (hostLobby.Players.Count + " / " + hostLobby.MaxPlayers).ToString();
         }
     }
 
@@ -255,9 +291,12 @@ public class LobbyManager : MonoBehaviour
         try
         {
             QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-            _ = await Lobbies.Instance.JoinLobbyByIdAsync(queryResponse.Results[0].Id);
-
+            hostLobby = await Lobbies.Instance.JoinLobbyByIdAsync(queryResponse.Results[0].Id);
+            InLobbyPanel.SetActive(true);
+            LobbiesListPanel.SetActive(false);
             Debug.Log("Joined Lobby");
+            lobyyNameForInLobby.text = hostLobby.Name;
+            lobyyPlayerCountText.text = (hostLobby.Players.Count + " / " + hostLobby.MaxPlayers).ToString();
         }
         catch (LobbyServiceException e)
         {
@@ -267,7 +306,14 @@ public class LobbyManager : MonoBehaviour
 
     public void OnJoinLobbyById()
     {
-        JoinLobbyById();
+        if (hostLobby == null)
+        {
+            JoinLobbyById();
+        }
+        else
+        {
+            Debug.Log("You are already in a Lobby name: " + hostLobby.Name + "'");
+        }
     }
 
     private async void JoinLobbyWithCode(string lobbyCode)
@@ -319,6 +365,17 @@ public class LobbyManager : MonoBehaviour
         foreach (Player player in lobby.Players)
         {
             Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
+
+            GameObject playerCard = Instantiate(playerNameCard, lobiesListParentGO.transform);
+            playerListGO.Add(playerCard);
+            PlayerNameCard playerNameCardComponent = playerCard.GetComponent<PlayerNameCard>();
+            playerNameCardComponent.playerName = player.Data["PlayerName"].Value;
+            playerNameCardComponent.SetPlayerName();
+            if (IsLobbyHost())
+            {
+                string playerId = player.Id.ToString();
+                //playerNameCardComponent.kickPlayerButton.onClick.AddListener(OnClickKickPlayer(playerId));
+            }
         }
     }
 
@@ -345,12 +402,15 @@ public class LobbyManager : MonoBehaviour
     {
         LobbiesListPanel.SetActive(true);
         CreateLobbyPanel.SetActive(false);
+        ListLobbies();
     }
 
     public void ExitLobbiesListPanel()
     {
         CreateLobbyPanel.SetActive(true);
         LobbiesListPanel.SetActive(false);
+        lobbyListGO.ForEach(ll => Destroy(ll));
+        lobbyListGO.Clear();
     }
 
     public void GetPlayerName(string playerNameIn)
@@ -367,5 +427,59 @@ public class LobbyManager : MonoBehaviour
     {
         invalidLobbyNamePrompter.text = "";
         invalidNamePrompter.text = "";
+    }
+
+    private async void LeaveLobby()
+    {
+        if (hostLobby != null)
+        {
+            try
+            {
+                await LobbyService.Instance.RemovePlayerAsync(hostLobby.Id, AuthenticationService.Instance.PlayerId);
+
+                hostLobby = null;
+                Debug.Log("Lobby Leaved! ");
+                CreateLobbyPanel.SetActive(true);
+                InLobbyPanel.SetActive(false);
+                if (playerListGO.Count > 0)
+                {
+                    playerListGO.ForEach(pL => Destroy(pL));
+                    playerListGO.Clear();
+                }
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+
+    public void OnClickLeaveLobbyButton()
+    {
+        LeaveLobby();
+    }
+
+    private async void KickPlayer(string playerId)
+    {
+        if (IsLobbyHost())
+        {
+            try
+            {
+                await LobbyService.Instance.RemovePlayerAsync(hostLobby.Id, playerId);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
+    public bool IsLobbyHost()
+    {
+        return hostLobby != null && hostLobby.HostId == AuthenticationService.Instance.PlayerId;
+    }
+
+    public void OnClickKickPlayer(string playerId)
+    {
+        KickPlayer(playerId);
     }
 }

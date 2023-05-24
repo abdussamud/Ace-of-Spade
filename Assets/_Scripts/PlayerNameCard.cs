@@ -9,7 +9,7 @@ public class PlayerNameCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerNameText;
 
 
-    public void SetLobbyName_and_PlayerCount()
+    public void SetPlayerName()
     {
         playerNameText.text = playerName;
     }
