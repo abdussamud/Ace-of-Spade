@@ -50,6 +50,7 @@ public class DataManager : MonoBehaviour
             GameData loadedData = JsonConvert.DeserializeObject<GameData>(json);
 
             gameData.userName = loadedData.userName;
+            gameData.playerId = loadedData.playerId;
 
             Debug.Log("Data loaded from " + filePath);
         }

@@ -5,4 +5,5 @@ using UnityEngine;
 public class GameData : ScriptableObject
 {
     public string userName;
+    public string playerId;
 }
