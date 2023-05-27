@@ -21,6 +21,7 @@ public class LobbyManager : MonoBehaviour
     public GameObject CreateLobbyPanel;
     public GameObject LobbiesListPanel;
     public GameObject InLobbyPanel;
+    public GameObject[] panelArray;
 
     [Header("Account")]
     private string playerName;
@@ -54,6 +55,7 @@ public class LobbyManager : MonoBehaviour
     private bool isLobbyPrivate;
     [SerializeField]
     private List<GameObject> lobbyListGO = new();
+    private bool quitGame;
 
 
     private void Awake() { Instance = this; }
@@ -63,19 +65,41 @@ public class LobbyManager : MonoBehaviour
         playerNameCard.ForEach(pNC => pNC.gameObject.SetActive(false));
         if (!string.IsNullOrEmpty(gameData.userName))
         {
+            ActivatePanel(CreateLobbyPanel.name);
             playerName = gameData.userName;
             AccountLogin();
+        }
+        else
+        {
+            ActivatePanel(CreateAccountPanel.name);
         }
     }
 
     private void Update()
     {
-        HandleLobbyHeartbeat();
+        if (!quitGame) { HandleLobbyHeartbeat(); }
     }
 
     private void OnApplicationQuit()
     {
-        LeaveLobby();
+        quitGame = true;
+        QuitLobbyOnApplicationClose();
+    }
+
+    private async void QuitLobbyOnApplicationClose()
+    {
+        if (joinedLobby != null)
+        {
+            try
+            {
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+                joinedLobby = null;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
     }
 
     public void OnCreateAccountButtonClicked()
@@ -119,18 +143,19 @@ public class LobbyManager : MonoBehaviour
             gameData.userName = playerName;
             DataManager.Instance.SaveData();
             Debug.Log(playerName);
-            CreateLobbyPanel.SetActive(true);
-            CreateAccountPanel.SetActive(false);
+            ActivatePanel(CreateLobbyPanel.name);
+            GameManager.loginSuccess = true;
         }
         catch (LobbyServiceException e)
         {
             Debug.Log("Error occurred during Unity services initialization: " + e.Message);
+            ActivatePanel(CreateAccountPanel.name);
         }
     }
 
     private async void HandleLobbyHeartbeat()
     {
-        if (IsLobbyHost())
+        if (IsLobbyHost() && !quitGame)
         {
             heartbeatTimer -= Time.deltaTime;
             if (heartbeatTimer < 0f)
@@ -141,7 +166,7 @@ public class LobbyManager : MonoBehaviour
                 await LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
             }
         }
-        if (joinedLobby != null && joinedLobby.Players.Count > 0)
+        if (joinedLobby != null && joinedLobby.Players.Count > 0 && !quitGame)
         {
             lobbyPollTimer -= Time.deltaTime;
             if (lobbyPollTimer < 0f)
@@ -149,19 +174,18 @@ public class LobbyManager : MonoBehaviour
                 float lobbyPollTimerMax = 1.1f;
                 lobbyPollTimer = lobbyPollTimerMax;
                 joinedLobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
-                if (joinedLobby != null && joinedLobby.Players[0].Id != null)
+                if (IsPlayerInLobby() && !quitGame)
                 {
                     PrintPlayers(joinedLobby);
                 }
                 else
                 {
-                    CreateLobbyPanel.SetActive(true);
-                    InLobbyPanel.SetActive(false);
+                    joinedLobby = null;
+                    ActivatePanel(CreateLobbyPanel.name);
                 }
             }
         }
     }
-
 
     private async void CreateLobby()
     {
@@ -187,8 +211,8 @@ public class LobbyManager : MonoBehaviour
 
             }
             Debug.Log("Created Lobby! " + lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Id + " " + lobby.LobbyCode);
-            InLobbyPanel.SetActive(true);
-            CreateLobbyPanel.SetActive(false);
+
+            ActivatePanel(InLobbyPanel.name);
             lobbyPollTimer = 15;
             PrintPlayers(joinedLobby);
             lobyyNameForInLobby.text = joinedLobby.Name;
@@ -265,10 +289,9 @@ public class LobbyManager : MonoBehaviour
 
     private void LogLobbies(QueryResponse queryResponse)
     {
-        Debug.Log("Lobbies found: " + queryResponse.Results.Count);
         foreach (Lobby lobby in queryResponse.Results)
         {
-            Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.Data["GameMode"].Value);
+            Debug.Log("lobby.Name: " + lobby.Name + ",  lobby.MaxPlayers: " + lobby.MaxPlayers/* + " " + lobby.Data["GameMode"].Value*/);
 
             GameObject lobbyCard = Instantiate(lobbyNameCard, lobiesListParentGO.transform);
             lobbyListGO.Add(lobbyCard);
@@ -282,6 +305,8 @@ public class LobbyManager : MonoBehaviour
             lobyyNameForInLobby.text = lobby.Name;
             lobyyPlayerCountText.text = (lobby.Players.Count + " / " + lobby.MaxPlayers).ToString();
         }
+
+        ActivatePanel(LobbiesListPanel.name);
     }
 
     private void LogException(LobbyServiceException e)
@@ -303,11 +328,12 @@ public class LobbyManager : MonoBehaviour
             {
                 Player = GetPlayer(),
             });
-            InLobbyPanel.SetActive(true);
-            LobbiesListPanel.SetActive(false);
+            ActivatePanel(InLobbyPanel.name);
             Debug.Log("Joined Lobby");
             lobyyNameForInLobby.text = joinedLobby.Name;
             lobyyPlayerCountText.text = (joinedLobby.Players.Count + " / " + joinedLobby.MaxPlayers).ToString();
+            lobbyListGO.ForEach(lLGO => Destroy(lLGO));
+            lobbyListGO.Clear();
         }
         catch (LobbyServiceException e)
         {
@@ -331,10 +357,7 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
-            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new()
-            {
-                Player = GetPlayer()
-            };
+            JoinLobbyByCodeOptions joinLobbyByCodeOptions = new() { Player = GetPlayer() };
 
             Lobby joinLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
             Debug.Log("Joined Lobby with code " + lobbyCode);
@@ -376,6 +399,7 @@ public class LobbyManager : MonoBehaviour
         lobyyPlayerCountText.text = (lobby.Players.Count + " / " + lobby.MaxPlayers).ToString();
         for (int i = 0; i < lobby.Players.Count; i++)
         {
+            if (quitGame) { return; }
             Debug.Log(lobby.Players[i].Id + " " + lobby.Players[i].Data["PlayerName"].Value);
             playerNameCard[i].gameObject.SetActive(true);
             playerNameCard[i].playerName = lobby.Players[i].Data["PlayerName"].Value;
@@ -383,11 +407,15 @@ public class LobbyManager : MonoBehaviour
             if (IsLobbyHost())
             {
                 playerIdList[i] = lobby.Players[i].Id;
-                playerNameCard[i].kickPlayerButton.interactable = true;
+                playerNameCard[i].kickPlayerButton.gameObject.SetActive(true);
+                if (lobby.Players[i].Data["PlayerName"].Value == playerName)
+                {
+                    playerNameCard[i].kickPlayerButton.gameObject.SetActive(false);
+                }
             }
             else
             {
-                playerNameCard[i].kickPlayerButton.interactable = false;
+                playerNameCard[i].kickPlayerButton.gameObject.SetActive(false);
             }
         }
         for (int i = lobby.Players.Count; i < playerNameCard.Count; i++)
@@ -417,8 +445,6 @@ public class LobbyManager : MonoBehaviour
 
     public void OnCheckAvailableLobbiesButtonClicked()
     {
-        LobbiesListPanel.SetActive(true);
-        CreateLobbyPanel.SetActive(false);
         ListLobbies();
     }
 
@@ -427,8 +453,8 @@ public class LobbyManager : MonoBehaviour
         Debug.Log("lobbyListGO.Count" + lobbyListGO.Count);
         lobbyListGO.ForEach(lLGO => Destroy(lLGO));
         lobbyListGO.Clear();
-        CreateLobbyPanel.SetActive(true);
-        LobbiesListPanel.SetActive(false);
+
+        ActivatePanel(CreateLobbyPanel.name);
     }
 
     public void GetPlayerName(string playerNameIn)
@@ -454,17 +480,11 @@ public class LobbyManager : MonoBehaviour
             try
             {
                 playerNameCard.ForEach(pNC => pNC.gameObject.SetActive(false));
-                if (joinedLobby != null && joinedLobby.Players.Count > 2)
-                {
-                    PrintPlayers(joinedLobby);
-                }
                 await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
-
 
                 joinedLobby = null;
                 Debug.Log("Lobby Leaved! ");
-                CreateLobbyPanel.SetActive(true);
-                InLobbyPanel.SetActive(false);
+                ActivatePanel(CreateLobbyPanel.name);
             }
             catch (LobbyServiceException e)
             {
@@ -492,13 +512,35 @@ public class LobbyManager : MonoBehaviour
             }
         }
     }
+
     public bool IsLobbyHost()
     {
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
+    private bool IsPlayerInLobby()
+    {
+        if (joinedLobby != null && joinedLobby.Players != null)
+        {
+            foreach (Player player in joinedLobby.Players)
+            {
+                if (player.Id == AuthenticationService.Instance.PlayerId)
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void OnClickKickPlayer(int playerIdNumber)
     {
         KickPlayer(playerIdList[playerIdNumber]);
+    }
+
+    private void ActivatePanel(string panelName)
+    {
+        panelArray.ToList().ForEach(p => p.SetActive(p.name == panelName));
     }
 }

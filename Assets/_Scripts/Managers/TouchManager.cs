@@ -4,7 +4,7 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private GameObject sellectedCard;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameController gameController;
     public Card oldSelectedCard;
     public LayerMask cardLayer;
     public LayerMask cellLayer;
@@ -62,7 +62,7 @@ public class TouchManager : MonoBehaviour
 
     public void PlaceCard()
     {
-        foreach (Cell cell in gameManager.cellPositions)
+        foreach (Cell cell in gameController.cellPositions)
         {
             if (!cell.isOccupide)
             {
