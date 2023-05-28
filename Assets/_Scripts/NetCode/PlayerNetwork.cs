@@ -1,11 +1,17 @@
 using Unity.Netcode;
 using UnityEngine;
 
+
 public class PlayerNetwork : NetworkBehaviour
 {
     private NetworkVariable<int> m_RandomNumber = new(1, NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
 
+
+    private void Start()
+    {
+        GetComponent<SpriteRenderer>().color = NetworkManagerUI.playerDPColor;
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -15,26 +21,6 @@ public class PlayerNetwork : NetworkBehaviour
         };
     }
 
-    private void Update()
-    {
-        if (IsOwner)
-        {
-            if (Input.GetKeyUp(KeyCode.R))
-            {
-                m_RandomNumber.Value = Random.Range(0, 100);
-            }
-
-            Vector3 moveDirection = new();
-
-            if (Input.GetKey(KeyCode.W)) moveDirection.z = +1f;
-            if (Input.GetKey(KeyCode.S)) moveDirection.z = -1f;
-            if (Input.GetKey(KeyCode.D)) moveDirection.x = +1f;
-            if (Input.GetKey(KeyCode.A)) moveDirection.x = -1f;
-
-            float moveSpeed = 3f;
-            transform.position += moveSpeed * Time.deltaTime * moveDirection;
-        }
-    }
 }
 
 /*
@@ -99,4 +85,25 @@ public class PlayerNetwork : NetworkBehaviour
         }
     }
 }
+
+
+new
+
+        //if (IsOwner)
+        //{
+        //    if (Input.GetKeyUp(KeyCode.R))
+        //    {
+        //        m_RandomNumber.Value = Random.Range(0, 100);
+        //    }
+
+        //    Vector3 moveDirection = new();
+
+        //    if (Input.GetKey(KeyCode.W)) moveDirection.z = +1f;
+        //    if (Input.GetKey(KeyCode.S)) moveDirection.z = -1f;
+        //    if (Input.GetKey(KeyCode.D)) moveDirection.x = +1f;
+        //    if (Input.GetKey(KeyCode.A)) moveDirection.x = -1f;
+
+        //    float moveSpeed = 3f;
+        //    transform.position += moveSpeed * Time.deltaTime * moveDirection;
+        //}
 */
