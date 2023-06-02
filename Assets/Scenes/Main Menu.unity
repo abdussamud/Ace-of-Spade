@@ -402,6 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 121860045}
   - component: {fileID: 121860046}
+  - component: {fileID: 121860047}
   m_Layer: 0
   m_Name: Network UI Manager
   m_TagString: Untagged
@@ -446,6 +447,34 @@ MonoBehaviour:
   playerDPParentGO: {fileID: 1348373289}
   playerDPImage: {fileID: 1851582930}
   dpGO: {fileID: 6808872363476644893, guid: 13c6c799c6c90504aa12b30e076ec67c, type: 3}
+--- !u!114 &121860047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121860044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8204c8ed5108e4da873c21d367c87c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 4162393a67787bd4b9585e5bd56cc162, type: 2}
+  onEventTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 121860046}
+        m_TargetAssemblyTypeName: NetworkManagerUI, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &303687883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,11 +1721,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 957774015}
-    PlayerPrefab: {fileID: 2651115307705409552, guid: 7f66c2b4ca3dd6849ac38103c32d6150, type: 3}
+    PlayerPrefab: {fileID: 737758794261352190, guid: 4d9e3f0dae7f15c49836db2a8871fcc2, type: 3}
     Prefabs:
       NetworkPrefabsLists: []
     TickRate: 30
@@ -2463,7 +2492,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.059998, y: -588.05225}
+  m_AnchoredPosition: {x: 15.060059, y: -588.05225}
   m_SizeDelta: {x: -610.816, y: 236.254}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1303635924
