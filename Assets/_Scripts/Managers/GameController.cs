@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public static GameController gc;
+
+    public List<PlayerController> players;
     public List<Card> deck;
     public int numPlayers;
     public int cardsPerPlayer;
@@ -12,8 +15,12 @@ public class GameController : MonoBehaviour
     public CardsPlace[] cardPlaces;
     public List<Cell> cellPositions;
 
+    private void Awake()
+    {
+        gc = this;
+    }
 
-    private void Start()
+    private void MyStart()
     {
         cardsPerPlayer = deck.Count / numPlayers;
         int place = numPlayers == 3 ? 0 : numPlayers == 4 ? 1 : numPlayers == 5 ? 2 : numPlayers == 6 ? 3 : 4;
@@ -117,7 +124,7 @@ public class Cell
 {
     public string name;
     public bool isOccupide;
-    public Card currentCard;
     public int number;
+    public Card currentCard;
     public Transform cellTransform;
 }
