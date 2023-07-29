@@ -389,6 +389,105 @@ Transform:
   m_Father: {fileID: 657522834}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &70802005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70802006}
+  - component: {fileID: 70802007}
+  m_Layer: 0
+  m_Name: Player Controller (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &70802006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70802005}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1539691431}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70802007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70802005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2404bb2ae163c4ebc4620e26fe3c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 0
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
+  handIntList: 
 --- !u!1 &75449068
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,6 +3365,105 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &454135854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454135855}
+  - component: {fileID: 454135856}
+  m_Layer: 0
+  m_Name: Player Controller (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &454135855
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454135854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1539691431}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &454135856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454135854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2404bb2ae163c4ebc4620e26fe3c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 0
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
+  handIntList: 
 --- !u!1 &461480024
 GameObject:
   m_ObjectHideFlags: 0
@@ -5160,6 +5358,105 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &679656480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 679656481}
+  - component: {fileID: 679656482}
+  m_Layer: 0
+  m_Name: Player Controller (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &679656481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679656480}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1539691431}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &679656482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679656480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2404bb2ae163c4ebc4620e26fe3c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 0
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
+  handIntList: 
 --- !u!1 &686972439
 GameObject:
   m_ObjectHideFlags: 0
@@ -5679,6 +5976,105 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &728489259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 728489260}
+  - component: {fileID: 728489261}
+  m_Layer: 0
+  m_Name: Player Controller (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &728489260
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728489259}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1539691431}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &728489261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728489259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2404bb2ae163c4ebc4620e26fe3c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 0
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
+  handIntList: 
 --- !u!1 &729532691
 GameObject:
   m_ObjectHideFlags: 0
@@ -8681,6 +9077,7 @@ MonoBehaviour:
       currentCard: {fileID: 0}
       cellTransform: {fileID: 178513414}
   cellPositions: []
+  playerNumber: 0
 --- !u!1 &1138984386
 GameObject:
   m_ObjectHideFlags: 0
@@ -9750,7 +10147,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 0
-  hand: []
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
   handIntList: 
 --- !u!1 &1258247085
 GameObject:
@@ -10107,7 +10556,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 0
-  hand: []
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
   handIntList: 
 --- !u!1 &1289459088
 GameObject:
@@ -11555,6 +12056,10 @@ Transform:
   - {fileID: 1273505906}
   - {fileID: 2112485060}
   - {fileID: 1251918100}
+  - {fileID: 679656481}
+  - {fileID: 70802006}
+  - {fileID: 728489260}
+  - {fileID: 454135855}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12875,7 +13380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -151, y: 151}
+  m_AnchoredPosition: {x: -151, y: 152}
   m_SizeDelta: {x: 160, y: 138.72382}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1735658145
@@ -15768,5 +16273,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 0
-  hand: []
+  hand:
+  - {fileID: 1905754111}
+  - {fileID: 721760689}
+  - {fileID: 885548247}
+  - {fileID: 1427296559}
+  - {fileID: 1933239976}
+  - {fileID: 1565575302}
+  - {fileID: 1270519659}
+  - {fileID: 528629951}
+  - {fileID: 1921751552}
+  - {fileID: 2058193449}
+  - {fileID: 304662671}
+  - {fileID: 79506214}
+  - {fileID: 1455149759}
+  - {fileID: 1426570565}
+  - {fileID: 461480027}
+  - {fileID: 749719426}
+  - {fileID: 2028960263}
+  - {fileID: 662517439}
+  - {fileID: 751004500}
+  - {fileID: 1206025947}
+  - {fileID: 1138984389}
+  - {fileID: 1180286347}
+  - {fileID: 1442301861}
+  - {fileID: 263288467}
+  - {fileID: 23126430}
+  - {fileID: 276106711}
+  - {fileID: 182173315}
+  - {fileID: 1046587865}
+  - {fileID: 1016439358}
+  - {fileID: 1011146268}
+  - {fileID: 1174285847}
+  - {fileID: 820400648}
+  - {fileID: 226601475}
+  - {fileID: 576414492}
+  - {fileID: 1607816973}
+  - {fileID: 155620249}
+  - {fileID: 761568339}
+  - {fileID: 926362750}
+  - {fileID: 1476018883}
+  - {fileID: 138462249}
+  - {fileID: 1645176600}
+  - {fileID: 1504391138}
+  - {fileID: 1400941699}
+  - {fileID: 1081755210}
+  - {fileID: 1765426342}
+  - {fileID: 111247386}
+  - {fileID: 804750294}
+  - {fileID: 1872285224}
+  - {fileID: 2049339477}
+  - {fileID: 1790051694}
+  - {fileID: 1181558090}
+  - {fileID: 584058377}
   handIntList: 

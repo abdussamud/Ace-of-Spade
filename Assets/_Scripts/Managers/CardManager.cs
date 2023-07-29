@@ -62,7 +62,29 @@ public class CardManager : MonoBehaviour
             currentPlayer++;
             yield return new WaitForSeconds(0.7f);
         }
+        yield return new WaitForSeconds(0.3f);
+        DealRemaningCards();
         GameplayUI.gUI.CardManagerPanel();
+        ActivateAllPlayersCards();
+    }
+
+    private void ActivateAllPlayersCards()
+    {
+        for (int i = 0; i < numPlayers; i++)
+        {
+            GameController.gc.players[i].ActivatePlayerCards();
+        }
+    }
+
+    private void DealRemaningCards()
+    {
+        int currentPlayerIndex = 0;
+        while (ID < cards.Count)
+        {
+            GameController.gc.players[currentPlayerIndex].handIntList.Add(cards[ID].cardID);
+            ID++;
+            currentPlayerIndex++;
+        }
     }
 
     private IEnumerator StartGameOnPlayerComplete()
