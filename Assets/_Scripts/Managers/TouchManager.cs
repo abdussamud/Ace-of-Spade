@@ -1,6 +1,5 @@
 using UnityEngine;
-
-
+// cards place , sort
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private GameObject sellectedCard;
@@ -62,11 +61,11 @@ public class TouchManager : MonoBehaviour
 
     public void PlaceCard()
     {
-        foreach (Cell cell in gameController.cellPositions)
+        foreach (Cell cell in CardManager.cm.cells)
         {
             if (!cell.isOccupide)
             {
-                sellectedCard.transform.position = cell.cellTransform.position;
+                sellectedCard.transform.position = cell.transform.position;
                 sellectedCard.GetComponent<SpriteRenderer>().color = Color.white;
                 sellectedCard.tag = "Untagged";
                 sellectedCard.layer = default;

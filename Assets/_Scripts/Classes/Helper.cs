@@ -1,6 +1,22 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+
+public static class Helper
+{
+    public static void Shuffle<T>(List<T> list)
+    {
+        System.Random rand = new();
+        int n = list.Count;
+        while (n > 1)
+        {
+            int k = rand.Next(n);
+            n--;
+            (list[n], list[k]) = (list[k], list[n]);
+        }
+    }
+}
 
 [Serializable]
 public class Sound
@@ -21,3 +37,6 @@ public class Sound
     public bool playOnAwake;
     public bool loop;
 }
+
+[SerializeField]
+public enum Mode { AI, Online, }
