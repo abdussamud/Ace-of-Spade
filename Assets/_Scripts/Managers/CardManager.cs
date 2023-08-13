@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AlphaKnight;
 // shuffling, dealing, placing, collecting
 public class CardManager : MonoBehaviour
 {
@@ -93,7 +94,8 @@ public class CardManager : MonoBehaviour
         if (startGame)
         {
             cardsPerPlayer = cards.Count / numPlayers;
-            Helper.Shuffle(cards);
+            Helper helper = new();
+            helper.Shuffle(cards);
             GameplayUI.gUI.DealCardButton(interactable: true);
         }
         else { Debug.Log("Players are Less then 3"); }

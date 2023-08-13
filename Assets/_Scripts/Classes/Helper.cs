@@ -3,17 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public static class Helper
+namespace AlphaKnight
 {
-    public static void Shuffle<T>(List<T> list)
+    public class Helper
     {
-        System.Random rand = new();
-        int n = list.Count;
-        while (n > 1)
+        public  void Shuffle<T>(List<T> list)
         {
-            int k = rand.Next(n);
-            n--;
-            (list[n], list[k]) = (list[k], list[n]);
+            System.Random rand = new();
+            int n = list.Count;
+            while (n > 1)
+            {
+                int k = rand.Next(n);
+                n--;
+                (list[n], list[k]) = (list[k], list[n]);
+            }
+        }
+    }
+
+    public class TransformSet
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        public Vector3 scale;
+
+        public TransformSet(Vector3 position = new(), Quaternion rotation = new(), Vector3 scale = new())
+        {
+            this.position = position;
+            this.rotation = rotation;
+            this.scale = scale;
         }
     }
 }

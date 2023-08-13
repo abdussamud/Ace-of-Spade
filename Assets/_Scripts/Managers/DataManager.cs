@@ -1,32 +1,23 @@
-using System.IO;
 using Newtonsoft.Json;
+using System.IO;
 using UnityEngine;
-
 
 public class DataManager : MonoBehaviour
 {
-    public static DataManager Instance { get; private set; }
-
+    public static DataManager dm;
+    [SerializeField]
+    private bool resetData;
     [SerializeField]
     private string filePath;
     [SerializeField]
     private GameData gameData;
-    [SerializeField]
-    private bool resetData;
-
 
     private void Awake()
     {
-        Instance = this;
-        filePath = Application.persistentDataPath + "/savedData.json";
-        if (!resetData)
-        {
-            LoadData();
-        }
-        else
-        {
-            SaveData();
-        }
+        dm = this;
+        filePath = Application.persistentDataPath + "/customData.json";
+        if (!resetData) { LoadData(); }
+        else { ResetData(); }
     }
 
     private void OnApplicationQuit()
@@ -58,5 +49,12 @@ public class DataManager : MonoBehaviour
         {
             Debug.LogWarning("Save file not found at " + filePath);
         }
+    }
+
+    public void ResetData()
+    {
+        gameData.userName = null;
+        gameData.playerId = null;
+        SaveData();
     }
 }

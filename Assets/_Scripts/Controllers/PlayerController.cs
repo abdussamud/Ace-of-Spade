@@ -9,11 +9,6 @@ public class PlayerController : MonoBehaviour
     public string playerName;
     public List<int> handIntList;
 
-    private void Start()
-    {
-
-    }
-
     public void ActivatePlayerCards()
     {
         if (isPlayer) { _ = StartCoroutine(ActivateCardsRoutine()); }
