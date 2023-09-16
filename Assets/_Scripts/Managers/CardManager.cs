@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using AlphaKnight;
-// shuffling, dealing, placing, collecting
+
 public class CardManager : MonoBehaviour
 {
     public static CardManager cm;
@@ -17,6 +15,7 @@ public class CardManager : MonoBehaviour
     private bool startGame;
     private int ID = 0;
     private Coroutine coroutine = null;
+    private GameplayUI Gui => GameplayUI.gUI;
 
     private void Awake()
     {
@@ -27,17 +26,19 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    private IEnumerator StartGameOnPlayerComplete()
+    private void Start()
     {
-        numPlayers = GameController.gc.players.Count;
-        while (GameController.gc.players.Count < 3)
-        {
-            Debug.Log("Players are less then 3 wait for 1 second!");
-            yield return new WaitForSeconds(1);
-            numPlayers = GameController.gc.players.Count;
-        }
-        startGame = true;
-        GameplayUI.gUI.StartGame();
+        SetGame();
+    }
+
+    private void SetGame()
+    {
+        numPlayers = Gui.playerCount;
+        cardsPerPlayer = cards.Count / numPlayers;
+        Helper.Shuffle(cards);
+        Helper.Shuffle(cards);
+        Helper.Shuffle(cards);
+        _ = StartCoroutine(DealCardRoutine());
     }
 
     private IEnumerator DealCardRoutine()
@@ -51,7 +52,7 @@ public class CardManager : MonoBehaviour
                 GameController.gc.players[currentPlayer].handIntList.Add(cards[ID].cardID);
                 currentCard++;
                 ID++;
-                yield return new WaitForSeconds(0.1f);
+                yield return Helper.GetWait(0.1f);
             }
             currentPlayer++;
         }
@@ -77,34 +78,5 @@ public class CardManager : MonoBehaviour
         {
             GameController.gc.players[i].ActivatePlayerCards();
         }
-    }
-
-    public void StartGame()
-    {
-        coroutine ??= StartCoroutine(StartGameOnPlayerComplete());
-    }
-
-    public void ShuffleCards()
-    {
-        int place = numPlayers - 3;
-        int count = cells.Count;
-        cellParents[place].gameObject.SetActive(true);
-        cells = cellParents[place].cells.ToList();
-        for (int i = 0; i < count; i++) { cells[i].number = i; }
-        if (startGame)
-        {
-            cardsPerPlayer = cards.Count / numPlayers;
-            Helper helper = new();
-            helper.Shuffle(cards);
-            GameplayUI.gUI.DealCardButton(interactable: true);
-        }
-        else { Debug.Log("Players are Less then 3"); }
-    }
-
-    public void DealCard()
-    {
-        GameplayUI.gUI.DealCardButton();
-        GameplayUI.gUI.ShuffleCardButton();
-        _ = StartCoroutine(DealCardRoutine());
     }
 }

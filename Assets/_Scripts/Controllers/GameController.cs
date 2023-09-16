@@ -4,13 +4,14 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public static GameController gc;
-    public List<PlayerController> players;
+    public int playerCount;
+    public List<CardController> players;
 
     private void Awake()
     {
         gc = this;
         int i = 0;
-        foreach (PlayerController player in players)
+        foreach (CardController player in players)
         {
             player.playerNumber = i;
             i++;
