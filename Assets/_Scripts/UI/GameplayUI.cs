@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,37 +11,29 @@ public class GameplayUI : MonoBehaviour
     public GameObject startGamePanelGO;
     public Button dealCardButton;
     public Button shuffleCardButton;
-    public GameObject[] playerCardsGO;
-    public Sprite[] allCards;
-    public Image[] playerCards;
-    public DiscardCard[] opponentCards;
+    public Sprite[] cardSprites;
+    //public Image[] playerCards;
+    public PlayerCard[] playerCards;
+    public DiscardCard[] discardCards;
 
     private void Awake()
     {
         gUI = this;
     }
 
-    private void Start()
-    {
-        SetPlayers();
-    }
-
     public void SetPlayerCard(int cardNumber, int index)
     {
-        playerCardsGO[index].SetActive(true);
-        playerCards[index].sprite = allCards[cardNumber];
+        playerCards[index].gameObject.SetActive(true);
+        playerCards[index].SetSprite(cardSprites[cardNumber]);
     }
 
-    private void SetPlayers()
+    public void SetPlayerProfile(int playerNumber = 0, string playerName = "")
     {
-        for (int i = 0; i < playerCount; i++)
-        {
-            opponentCards[i].gameObject.SetActive(true);
-            opponentCards[i].numberText.text = (i + 1).ToString();
-            opponentCards[i].profileBG.color = Color.white;
-            opponentCards[i].turnText.text = "";
-            opponentCards[i].nameText.text = i == 0 ? "YOU" : "IC";
-        }
+        discardCards[playerNumber].gameObject.SetActive(true);
+        discardCards[playerNumber].numberText.text = (playerNumber + 1).ToString();
+        discardCards[playerNumber].profileBG.color = Color.white;
+        discardCards[playerNumber].turnText.text = "";
+        discardCards[playerNumber].nameText.text = playerName;
     }
 
     public void DealCardButton(bool interactable = false)

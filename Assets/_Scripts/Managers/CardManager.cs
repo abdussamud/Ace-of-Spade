@@ -8,14 +8,12 @@ public class CardManager : MonoBehaviour
     public int numPlayers;
     public int cardsPerPlayer;
     public List<Card> cards;
-    public List<Cell> cells;
-    public Transform[] cardPositions;
-    public CellsParent[] cellParents;
     [SerializeField]
     private bool startGame;
     private int ID = 0;
     private Coroutine coroutine = null;
     private GameplayUI Gui => GameplayUI.gUI;
+    private GameController Gc => GameController.gc;
 
     private void Awake()
     {
@@ -49,7 +47,7 @@ public class CardManager : MonoBehaviour
             int currentCard = 0;
             while (currentCard < cardsPerPlayer)
             {
-                GameController.gc.players[currentPlayer].handIntList.Add(cards[ID].cardID);
+                Gc.players[currentPlayer].handIntList.Add(cards[ID].cardID);
                 currentCard++;
                 ID++;
                 yield return Helper.GetWait(0.1f);
@@ -57,7 +55,7 @@ public class CardManager : MonoBehaviour
             currentPlayer++;
         }
         DealRemaningCards();
-        GameplayUI.gUI.CardManagerPanel();
+        Gui.CardManagerPanel();
         ActivateAllPlayersCards();
     }
 
@@ -76,7 +74,12 @@ public class CardManager : MonoBehaviour
     {
         for (int i = 0; i < numPlayers; i++)
         {
-            GameController.gc.players[i].ActivatePlayerCards();
+            CardController cc = Gc.players[i];
+            cc.ActivatePlayerCards();
+            if (cc.HaveAceOfSpade)
+            {
+                _ = StartCoroutine(cc.TurnRoutine(20f));
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController gc;
     public int playerCount;
+    public int turnPlayer;
     public List<CardController> players;
 
     private void Awake()

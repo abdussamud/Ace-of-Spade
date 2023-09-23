@@ -3,7 +3,6 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private GameObject sellectedCard;
-    [SerializeField] private GameController gameController;
     public Card oldSelectedCard;
     public LayerMask cardLayer;
     public LayerMask cellLayer;
@@ -12,7 +11,7 @@ public class TouchManager : MonoBehaviour
     private bool isCardPlaced;
     [SerializeField] private GameObject placeCardButton;
     private Color blueColor;
-
+    private GameController Gc => GameController.gc;
 
     private void Start()
     {
@@ -59,29 +58,29 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    public void PlaceCard()
-    {
-        foreach (Cell cell in CardManager.cm.cells)
-        {
-            if (!cell.isOccupide)
-            {
-                sellectedCard.transform.position = cell.transform.position;
-                sellectedCard.GetComponent<SpriteRenderer>().color = Color.white;
-                sellectedCard.tag = "Untagged";
-                sellectedCard.layer = default;
-                oldSelectedCard = null;
-                sellectedCard = null;
-                placeCardButton.SetActive(false);
-                isCardPlaced = true;
-                cell.isOccupide = true;
-                return;
-            }
-        }
-        Debug.Log("No Space");
-    }
-
     private RaycastHit2D Cast2DRay => Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 90f, cardLayer);
 
     private RaycastHit2D Cast2DRayForCell => Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 90f, cellLayer);
 
 }
+
+//public void PlaceCard()
+//{
+//    foreach (Cell cell in CardManager.cm.cells)
+//    {
+//        if (!cell.isOccupide)
+//        {
+//            sellectedCard.transform.position = cell.transform.position;
+//            sellectedCard.GetComponent<SpriteRenderer>().color = Color.white;
+//            sellectedCard.tag = "Untagged";
+//            sellectedCard.layer = default;
+//            oldSelectedCard = null;
+//            sellectedCard = null;
+//            placeCardButton.SetActive(false);
+//            isCardPlaced = true;
+//            cell.isOccupide = true;
+//            return;
+//        }
+//    }
+//    Debug.Log("No Space");
+//}

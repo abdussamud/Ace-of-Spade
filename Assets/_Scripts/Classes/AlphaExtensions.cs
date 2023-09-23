@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class AlphaExtensions
 {
@@ -8,6 +9,13 @@ public static class AlphaExtensions
         Color color = renderer.color;
         color.a = alpha;
         renderer.color = color;
+    }
+
+    public static void Fade(this Image image, float alpha)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
     }
 
     public static T GetRandom<T>(this IList<T> ts, int initialInclusive = 0, int finalExclusive = 0)
